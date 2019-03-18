@@ -15,13 +15,15 @@ func defaultHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 }
 
 func getSummonerStatsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	summonerProfile := models.GetSummonerProfile(params.ByName("summonername"), params.ByName("region"))
+	queryValues := r.URL.Query()
+
+	summonerProfile := models.GetSummonerProfile(params.ByName("summonername"), queryValues.Get("region"))
 	json.NewEncoder(w).Encode(summonerProfile)
 }
 
 func main() {
 	router := httprouter.New()
 	router.GET("/", defaultHandler)
-	router.GET("/summoner/:summonername/region/:region/stats", getSummonerStatsHandler)
+	router.GET("/api/summoner/:summonername/stats", getSummonerStatsHandler)
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
