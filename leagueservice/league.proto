@@ -3,6 +3,8 @@ syntax = "proto3";
 package leagueservice;
 option go_package="leagueservice";
 
+import "google/api/annotations.proto";
+
 message SummonerProfile {
   int32 profileIconId = 1; // ID of the summoner icon associated with the summoner.
   string name = 2; // Summoner name.
@@ -32,6 +34,10 @@ message GetSummonerStatsResponse {
 }
 
 service LeagueApi {
-  rpc GetSummonerStatsUnary(GetSummonerStatsRequest) returns (GetSummonerStatsResponse);
+  rpc GetSummonerStatsUnary(GetSummonerStatsRequest) returns (GetSummonerStatsResponse) {
+    option (google.api.http) = {
+      get: "/v1/summoner/{summoner_name}"
+    };
+  };
   rpc GetSummonerStatsBiDirectional(stream GetSummonerStatsRequest) returns (stream GetSummonerStatsResponse);
 }
