@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -20,11 +21,14 @@ type SummonerProfile struct {
 }
 
 // GetSummonerProfile returns a profile of the summoner
-func GetSummonerProfile(apiURL string) SummonerProfile {
+func GetSummonerProfile(summonerName, region string) SummonerProfile {
+	apiURL := fmt.Sprintf("https://%v.api.riotgames.com/lol/summoner/v4/summoners/by-name/%v", region, summonerName)
+
 	client := http.Client{
 		Timeout: 10 * time.Second,
 	}
 	req, reqErr := http.NewRequest(http.MethodGet, apiURL, nil)
+	req.Header.Set("X-Riot-Token", GetRiotAPIKey())
 	if reqErr != nil {
 		log.Fatalf("Error creating request: %v", reqErr)
 	}

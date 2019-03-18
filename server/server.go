@@ -10,8 +10,6 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/dannyrsu/league-api/utils"
-
 	"google.golang.org/grpc/reflection"
 
 	pb "github.com/dannyrsu/league-api/leagueservice"
@@ -32,8 +30,7 @@ var (
 type leagueServer struct{}
 
 func (*leagueServer) GetSummonerProfileUnary(ctx context.Context, req *pb.GetSummonerProfileRequest) (*pb.GetSummonerProfileResponse, error) {
-	apiURL := utils.GetSummonerProfileURL(req.GetSummonerName(), req.GetRegion(), *riotAPIKey)
-	summonerProfile := models.GetSummonerProfile(apiURL)
+	summonerProfile := models.GetSummonerProfile(req.GetSummonerName(), req.GetRegion())
 
 	res := &pb.GetSummonerProfileResponse{
 		ProfileIconId: int32(summonerProfile.ProfileIconID),
@@ -61,8 +58,7 @@ func (*leagueServer) GetSummonerProfileBiDirectional(stream pb.LeagueApi_GetSumm
 			return err
 		}
 
-		apiURL := utils.GetSummonerProfileURL(req.GetSummonerName(), req.GetRegion(), *riotAPIKey)
-		summonerProfile := models.GetSummonerProfile(apiURL)
+		summonerProfile := models.GetSummonerProfile(req.GetSummonerName(), req.GetRegion())
 		sendErr := stream.Send(&pb.GetSummonerProfileResponse{
 			ProfileIconId: int32(summonerProfile.ProfileIconID),
 			Name:          summonerProfile.Name,
