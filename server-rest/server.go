@@ -24,6 +24,6 @@ func getSummonerStatsHandler(w http.ResponseWriter, r *http.Request, params http
 func main() {
 	router := httprouter.New()
 	router.GET("/", defaultHandler)
-	router.GET("/api/summoner/:summonername/stats", getSummonerStatsHandler)
+	router.GET("/v1/summoner/:summonername/stats", getSummonerStatsHandler)
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

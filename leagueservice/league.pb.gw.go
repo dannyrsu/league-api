@@ -125,7 +125,7 @@ func RegisterLeagueApiHandlerClient(ctx context.Context, mux *runtime.ServeMux, 
 }
 
 var (
-	pattern_LeagueApi_GetSummonerStatsUnary_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "summoner", "summoner_name"}, ""))
+	pattern_LeagueApi_GetSummonerStatsUnary_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"v1", "summoner", "summoner_name", "stats"}, ""))
 )
 
 var (
