@@ -13,6 +13,14 @@ message SummonerProfile {
   string accountId	= 7; //	Encrypted account ID. Max length 56 characters.
 }
 
+message Match {
+
+}
+
+message MatchDetail {
+
+}
+
 message GetSummonerStatsRequest {
   string summoner_name = 1;
   string region = 2;
@@ -20,7 +28,7 @@ message GetSummonerStatsRequest {
 
 message GetSummonerStatsResponse {
   SummonerProfile summonerProfile = 1;
-
+  repeated Match match_history = 2;
 }
 
 service LeagueApi {
