@@ -28,23 +28,25 @@ var (
 
 type leagueServer struct{}
 
-func (*leagueServer) GetSummonerProfileUnary(ctx context.Context, req *pb.GetSummonerProfileRequest) (*pb.GetSummonerProfileResponse, error) {
+func (*leagueServer) GetSummonerStatsUnary(ctx context.Context, req *pb.GetSummonerStatsRequest) (*pb.GetSummonerStatsResponse, error) {
 	summonerProfile := models.GetSummonerProfile(req.GetSummonerName(), req.GetRegion())
 
-	res := &pb.GetSummonerProfileResponse{
-		ProfileIconId: int32(summonerProfile.ProfileIconID),
-		Name:          summonerProfile.Name,
-		Puuid:         summonerProfile.PUUID,
-		SummonerLevel: int64(summonerProfile.SummonerLevel),
-		RevisionDate:  int64(summonerProfile.RevisionDate),
-		Id:            summonerProfile.ID,
-		AccountId:     summonerProfile.AccountID,
+	res := &pb.GetSummonerStatsResponse{
+		SummonerProfile: &pb.SummonerProfile{
+			ProfileIconId: int32(summonerProfile.ProfileIconID),
+			Name:          summonerProfile.Name,
+			Puuid:         summonerProfile.PUUID,
+			SummonerLevel: int64(summonerProfile.SummonerLevel),
+			RevisionDate:  int64(summonerProfile.RevisionDate),
+			Id:            summonerProfile.ID,
+			AccountId:     summonerProfile.AccountID,
+		},
 	}
 
 	return res, nil
 }
 
-func (*leagueServer) GetSummonerProfileBiDirectional(stream pb.LeagueApi_GetSummonerProfileBiDirectionalServer) error {
+func (*leagueServer) GetSummonerStatsBiDirectional(stream pb.LeagueApi_GetSummonerStatsBiDirectionalServer) error {
 	for {
 		req, err := stream.Recv()
 
@@ -58,15 +60,18 @@ func (*leagueServer) GetSummonerProfileBiDirectional(stream pb.LeagueApi_GetSumm
 		}
 
 		summonerProfile := models.GetSummonerProfile(req.GetSummonerName(), req.GetRegion())
-		sendErr := stream.Send(&pb.GetSummonerProfileResponse{
-			ProfileIconId: int32(summonerProfile.ProfileIconID),
-			Name:          summonerProfile.Name,
-			Puuid:         summonerProfile.PUUID,
-			SummonerLevel: int64(summonerProfile.SummonerLevel),
-			RevisionDate:  int64(summonerProfile.RevisionDate),
-			Id:            summonerProfile.ID,
-			AccountId:     summonerProfile.AccountID,
-		})
+		sendErr := stream.Send(&pb.GetSummonerStatsResponse{
+			SummonerProfile: &pb.SummonerProfile{
+				ProfileIconId: int32(summonerProfile.ProfileIconID),
+				Name:          summonerProfile.Name,
+				Puuid:         summonerProfile.PUUID,
+				SummonerLevel: int64(summonerProfile.SummonerLevel),
+				RevisionDate:  int64(summonerProfile.RevisionDate),
+				Id:            summonerProfile.ID,
+				AccountId:     summonerProfile.AccountID,
+			},
+		},
+		)
 
 		if sendErr != nil {
 			log.Fatalf("Error while sending data to client: %v", err)

@@ -3,12 +3,7 @@ syntax = "proto3";
 package leagueservice;
 option go_package="leagueservice";
 
-message GetSummonerProfileRequest {
-  string summoner_name = 1;
-  string region = 2;
-}
-
-message GetSummonerProfileResponse {
+message SummonerProfile {
   int32 profileIconId = 1; // ID of the summoner icon associated with the summoner.
   string name = 2; // Summoner name.
   string puuid	= 3; //	Encrypted PUUID. Exact length of 78 characters.
@@ -17,7 +12,18 @@ message GetSummonerProfileResponse {
   string id	= 6; //	Encrypted summoner ID. Max length 63 characters.
   string accountId	= 7; //	Encrypted account ID. Max length 56 characters.
 }
+
+message GetSummonerStatsRequest {
+  string summoner_name = 1;
+  string region = 2;
+}
+
+message GetSummonerStatsResponse {
+  SummonerProfile summonerProfile = 1;
+
+}
+
 service LeagueApi {
-  rpc GetSummonerProfileUnary(GetSummonerProfileRequest) returns (GetSummonerProfileResponse);
-  rpc GetSummonerProfileBiDirectional(stream GetSummonerProfileRequest) returns (stream GetSummonerProfileResponse);
+  rpc GetSummonerStatsUnary(GetSummonerStatsRequest) returns (GetSummonerStatsResponse);
+  rpc GetSummonerStatsBiDirectional(stream GetSummonerStatsRequest) returns (stream GetSummonerStatsResponse);
 }
