@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/rs/cors"
+
 	"google.golang.org/grpc"
 
 	gw "github.com/dannyrsu/league-api/leagueservice"
@@ -26,11 +28,14 @@ func run() error {
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	err := gw.RegisterLeagueApiHandlerFromEndpoint(ctx, mux, *leagueEndpoint, opts)
+
 	if err != nil {
 		return err
 	}
 
-	return http.ListenAndServe(":8080", mux)
+	handler := cors.Default().Handler(mux)
+
+	return http.ListenAndServe(":8080", handler)
 }
 
 func main() {
