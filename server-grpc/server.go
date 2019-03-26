@@ -33,14 +33,13 @@ func (*leagueServer) GetSummonerStatsUnary(ctx context.Context, req *pb.GetSummo
 
 	res := &pb.GetSummonerStatsResponse{
 		SummonerProfile: &pb.SummonerProfile{
-			ProfileIconId:  int32(summonerProfile.ProfileIconID),
-			ProfileIconUrl: summonerProfile.ProfileIconURL,
-			Name:           summonerProfile.Name,
-			Puuid:          summonerProfile.PUUID,
-			SummonerLevel:  int64(summonerProfile.SummonerLevel),
-			RevisionDate:   int64(summonerProfile.RevisionDate),
-			Id:             summonerProfile.ID,
-			AccountId:      summonerProfile.AccountID,
+			ProfileIconId: int32(summonerProfile.ProfileIconID),
+			Name:          summonerProfile.Name,
+			Puuid:         summonerProfile.PUUID,
+			SummonerLevel: int64(summonerProfile.SummonerLevel),
+			RevisionDate:  int64(summonerProfile.RevisionDate),
+			Id:            summonerProfile.ID,
+			AccountId:     summonerProfile.AccountID,
 		},
 	}
 

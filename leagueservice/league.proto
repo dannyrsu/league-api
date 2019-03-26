@@ -7,13 +7,30 @@ import "google/api/annotations.proto";
 
 message SummonerProfile {
   int32 profileIconId = 1; // ID of the summoner icon associated with the summoner.
-  string profileIconUrl = 2;
   string name = 3; // Summoner name.
   string puuid	= 4; //	Encrypted PUUID. Exact length of 78 characters.
   int64 summonerLevel	= 5; //	Summoner level associated with the summoner.
   int64 revisionDate	= 6; //	Date summoner was last modified specified as epoch milliseconds. The following events will update this timestamp: profile icon change, playing the tutorial or advanced tutorial, finishing a game, summoner name change
   string id	= 7; //	Encrypted summoner ID. Max length 63 characters.
   string accountId	= 8; //	Encrypted account ID. Max length 56 characters.
+}
+
+message MatchHistory {
+  message Match {
+    string lane = 1;
+    double gameId = 2;
+    double champion = 3;
+    string platformId = 4;
+    double timestamp = 5;
+    double queue = 6;
+    string role = 7;
+    double season = 8;
+  }
+
+  repeated Match matches = 1;
+  double endIndex = 2;
+  double startIndex = 3;
+  double totalGames = 4;
 }
 
 message GetSummonerStatsRequest {

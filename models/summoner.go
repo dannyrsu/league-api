@@ -11,20 +11,18 @@ import (
 
 // SummonerProfile model
 type SummonerProfile struct {
-	ProfileIconID  int    `json:"profileIconId"`
-	ProfileIconURL string `json:"profileIconUrl"`
-	Name           string `json:"name"`
-	PUUID          string `json:"puuid"`
-	SummonerLevel  int    `json:"summonerLevel"`
-	RevisionDate   int    `json:"revisionDate"`
-	ID             string `json:"id"`
-	AccountID      string `json:"accountId"`
+	ProfileIconID int    `json:"profileIconId"`
+	Name          string `json:"name"`
+	PUUID         string `json:"puuid"`
+	SummonerLevel int    `json:"summonerLevel"`
+	RevisionDate  int    `json:"revisionDate"`
+	ID            string `json:"id"`
+	AccountID     string `json:"accountId"`
 }
 
 // GetSummonerProfile returns a profile of the summoner
 func GetSummonerProfile(summonerName, region string) SummonerProfile {
 	apiURL := fmt.Sprintf("https://%v.api.riotgames.com/lol/summoner/v4/summoners/by-name/%v", region, summonerName)
-	realmData := getRealmData()
 
 	client := http.Client{
 		Timeout: 10 * time.Second,
@@ -53,8 +51,6 @@ func GetSummonerProfile(summonerName, region string) SummonerProfile {
 	if jsonErr != nil {
 		log.Fatal(jsonErr)
 	}
-
-	summoner.ProfileIconURL = fmt.Sprintf("%v/%v/img/profileicon/%v.png", realmData.CDN, realmData.GameVersions.ProfileIcon, summoner.ProfileIconID)
 
 	return summoner
 }
