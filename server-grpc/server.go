@@ -28,20 +28,34 @@ var (
 
 type leagueServer struct{}
 
-func (*leagueServer) GetSummonerStatsUnary(ctx context.Context, req *pb.GetSummonerStatsRequest) (*pb.GetSummonerStatsResponse, error) {
-	summonerProfile := models.GetSummonerProfile(req.GetSummonerName(), req.GetRegion())
+func constructSummonerStatsResponse(summonerProfile models.SummonerProfile, matchHistory models.MatchHistory) *pb.GetSummonerStatsResponse {
 
 	res := &pb.GetSummonerStatsResponse{
 		SummonerProfile: &pb.SummonerProfile{
-			ProfileIconId: int32(summonerProfile.ProfileIconID),
+			ProfileIconId: summonerProfile.ProfileIconID,
 			Name:          summonerProfile.Name,
 			Puuid:         summonerProfile.PUUID,
-			SummonerLevel: int64(summonerProfile.SummonerLevel),
-			RevisionDate:  int64(summonerProfile.RevisionDate),
+			SummonerLevel: summonerProfile.SummonerLevel,
+			RevisionDate:  summonerProfile.RevisionDate,
 			Id:            summonerProfile.ID,
 			AccountId:     summonerProfile.AccountID,
 		},
+		MatchHistory: &pb.MatchHistory{
+			// Matches:    matches,
+			EndIndex:   matchHistory.EndIndex,
+			StartIndex: matchHistory.StartIndex,
+			TotalGames: matchHistory.TotalGames,
+		},
 	}
+
+	return res
+}
+
+func (*leagueServer) GetSummonerStatsUnary(ctx context.Context, req *pb.GetSummonerStatsRequest) (*pb.GetSummonerStatsResponse, error) {
+	summonerProfile := models.GetSummonerProfile(req.GetSummonerName(), req.GetRegion())
+	matchHistory := models.GetMatchHistory(summonerProfile.AccountID, req.GetRegion(), 0, 5)
+
+	res := constructSummonerStatsResponse(summonerProfile, matchHistory)
 
 	return res, nil
 }

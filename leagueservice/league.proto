@@ -18,19 +18,19 @@ message SummonerProfile {
 message MatchHistory {
   message Match {
     string lane = 1;
-    double gameId = 2;
-    double champion = 3;
+    int64 gameId = 2;
+    int32 champion = 3;
     string platformId = 4;
-    double timestamp = 5;
-    double queue = 6;
+    int64 timestamp = 5;
+    int32 queue = 6;
     string role = 7;
-    double season = 8;
+    int32 season = 8;
   }
 
   repeated Match matches = 1;
-  double endIndex = 2;
-  double startIndex = 3;
-  double totalGames = 4;
+  int32 endIndex = 2;
+  int32 startIndex = 3;
+  int32 totalGames = 4;
 }
 
 message GetSummonerStatsRequest {
@@ -40,6 +40,7 @@ message GetSummonerStatsRequest {
 
 message GetSummonerStatsResponse {
   SummonerProfile summonerProfile = 1;
+  MatchHistory matchHistory = 2;
 }
 
 service LeagueApi {

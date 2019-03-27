@@ -18,7 +18,14 @@ func getSummonerStatsHandler(w http.ResponseWriter, r *http.Request, params http
 	queryValues := r.URL.Query()
 
 	summonerProfile := models.GetSummonerProfile(params.ByName("summonername"), queryValues.Get("region"))
-	json.NewEncoder(w).Encode(summonerProfile)
+	matchHistory := models.GetMatchHistory(summonerProfile.AccountID, queryValues.Get("region"), 0, 5)
+
+	results := map[string]interface{}{
+		"summonerProfile": summonerProfile,
+		"matchHistory":    matchHistory,
+	}
+
+	json.NewEncoder(w).Encode(results)
 }
 
 func main() {
