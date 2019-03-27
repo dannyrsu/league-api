@@ -29,6 +29,19 @@ var (
 type leagueServer struct{}
 
 func constructSummonerStatsResponse(summonerProfile models.SummonerProfile, matchHistory models.MatchHistory) *pb.GetSummonerStatsResponse {
+	matches := make([]*pb.MatchHistory_Match, len(matchHistory.Matches))
+	for i := range matchHistory.Matches {
+		matches[i] = &pb.MatchHistory_Match{
+			Lane:       matchHistory.Matches[i].Lane,
+			GameId:     matchHistory.Matches[i].GameID,
+			Champion:   matchHistory.Matches[i].Champion,
+			PlatformId: matchHistory.Matches[i].PlatformID,
+			Timestamp:  matchHistory.Matches[i].Timestamp,
+			Queue:      matchHistory.Matches[i].Queue,
+			Role:       matchHistory.Matches[i].Role,
+			Season:     matchHistory.Matches[i].Season,
+		}
+	}
 
 	res := &pb.GetSummonerStatsResponse{
 		SummonerProfile: &pb.SummonerProfile{
@@ -41,7 +54,7 @@ func constructSummonerStatsResponse(summonerProfile models.SummonerProfile, matc
 			AccountId:     summonerProfile.AccountID,
 		},
 		MatchHistory: &pb.MatchHistory{
-			// Matches:    matches,
+			Matches:    matches,
 			EndIndex:   matchHistory.EndIndex,
 			StartIndex: matchHistory.StartIndex,
 			TotalGames: matchHistory.TotalGames,
