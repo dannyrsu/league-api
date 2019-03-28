@@ -22,3 +22,5 @@ protoc -I/usr/local/include -I. -I$GOPATH/src -I$GOPATH/src/github.com/grpc-ecos
 - Add Docker file maybe K8s
 - Redis for caching profile calls
 - More end points for match history
+- Add channels and go routines for the api calls
+- Try to get rid of intermediate structs

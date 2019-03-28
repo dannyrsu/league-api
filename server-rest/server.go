@@ -15,6 +15,7 @@ func defaultHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 }
 
 func getSummonerStatsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	w.Header().Set("Content-Type", "application/json")
 	queryValues := r.URL.Query()
 
 	summonerProfile := models.GetSummonerProfile(params.ByName("summonername"), queryValues.Get("region"))

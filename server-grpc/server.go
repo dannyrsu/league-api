@@ -87,18 +87,8 @@ func (*leagueServer) GetSummonerStatsBiDirectional(stream pb.LeagueApi_GetSummon
 		}
 
 		summonerProfile := models.GetSummonerProfile(req.GetSummonerName(), req.GetRegion())
-		sendErr := stream.Send(&pb.GetSummonerStatsResponse{
-			SummonerProfile: &pb.SummonerProfile{
-				ProfileIconId: int32(summonerProfile.ProfileIconID),
-				Name:          summonerProfile.Name,
-				Puuid:         summonerProfile.PUUID,
-				SummonerLevel: int64(summonerProfile.SummonerLevel),
-				RevisionDate:  int64(summonerProfile.RevisionDate),
-				Id:            summonerProfile.ID,
-				AccountId:     summonerProfile.AccountID,
-			},
-		},
-		)
+		matchHistory := models.GetMatchHistory(summonerProfile.AccountID, req.GetRegion(), 0, 5)
+		sendErr := stream.Send(constructSummonerStatsResponse(summonerProfile, matchHistory))
 
 		if sendErr != nil {
 			log.Fatalf("Error while sending data to client: %v", err)

@@ -23,14 +23,15 @@ type SummonerProfile struct {
 // MatchHistory model
 type MatchHistory struct {
 	Matches []struct {
-		Lane       string `json:"lane"`
-		GameID     int64  `json:"gameId"`
-		Champion   int32  `json:"champion"`
-		PlatformID string `json:"platformId"`
-		Timestamp  int64  `json:"timestamp"`
-		Queue      int32  `json:"queue"`
-		Role       string `json:"role"`
-		Season     int32  `json:"season"`
+		Lane       string                 `json:"lane"`
+		GameID     int64                  `json:"gameId"`
+		Champion   int32                  `json:"champion"`
+		PlatformID string                 `json:"platformId"`
+		Timestamp  int64                  `json:"timestamp"`
+		Queue      int32                  `json:"queue"`
+		Role       string                 `json:"role"`
+		Season     int32                  `json:"season"`
+		Game       map[string]interface{} `json:"game"`
 	} `json:"matches"`
 	EndIndex   int32 `json:"endIndex"`
 	StartIndex int32 `json:"startIndex"`
@@ -73,8 +74,8 @@ func GetSummonerProfile(summonerName, region string) SummonerProfile {
 }
 
 // GetMatchHistory for the account
-func GetMatchHistory(accountID, region string, startIndex, endIndex int) MatchHistory {
-	apiURL := fmt.Sprintf("https://%v.api.riotgames.com/lol/match/v4/matchlists/by-account/%v?queue=420&endIndex=%v&beginIndex=%v", region, accountID, endIndex, startIndex)
+func GetMatchHistory(accountID, region string, beginIndex, endIndex int) MatchHistory {
+	apiURL := fmt.Sprintf("https://%v.api.riotgames.com/lol/match/v4/matchlists/by-account/%v?queue=420&endIndex=%v&beginIndex=%v", region, accountID, endIndex, beginIndex)
 	client := http.Client{
 		Timeout: 10 * time.Second,
 	}
@@ -101,6 +102,10 @@ func GetMatchHistory(accountID, region string, startIndex, endIndex int) MatchHi
 	jsonErr := json.Unmarshal(body, &matchHistory)
 	if jsonErr != nil {
 		log.Fatal(jsonErr)
+	}
+
+	for i := range matchHistory.Matches {
+		matchHistory.Matches[i].Game = GetGameData(matchHistory.Matches[i].GameID, region)
 	}
 
 	return matchHistory
