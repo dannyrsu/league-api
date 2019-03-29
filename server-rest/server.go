@@ -35,6 +35,7 @@ func main() {
 	router := httprouter.New()
 	router.GET("/", defaultHandler)
 	router.GET("/v1/summoner/:summonername/stats", getSummonerStatsHandler)
+	router.ServeFiles("/static/*filepath", http.Dir("static"))
 	handler := cors.Default().Handler(router)
 	log.Fatal(http.ListenAndServe(":8080", handler))
 }
