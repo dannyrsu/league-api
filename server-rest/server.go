@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/rs/cors"
+
 	"github.com/dannyrsu/league-api/models"
 	"github.com/julienschmidt/httprouter"
 )
@@ -33,5 +35,6 @@ func main() {
 	router := httprouter.New()
 	router.GET("/", defaultHandler)
 	router.GET("/v1/summoner/:summonername/stats", getSummonerStatsHandler)
-	log.Fatal(http.ListenAndServe(":8080", router))
+	handler := cors.Default().Handler(router)
+	log.Fatal(http.ListenAndServe(":8080", handler))
 }
