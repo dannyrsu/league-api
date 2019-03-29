@@ -14,7 +14,6 @@ message GetSummonerStatsRequest {
 message GetSummonerStatsResponse {
   google.protobuf.Struct summonerProfile = 1;
   google.protobuf.Struct matchHistory = 2;
-  google.protobuf.Struct realmData = 3;
 }
 
 service LeagueApi {

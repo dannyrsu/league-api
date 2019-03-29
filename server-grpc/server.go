@@ -31,14 +31,11 @@ var (
 
 type leagueServer struct{}
 
-type summonerStatsResponse struct{}
-
 func constructSummonerStatsResponse(summonerProfile models.SummonerProfile, matchHistory models.MatchHistory) *pb.GetSummonerStatsResponse {
 
 	m := map[string]interface{}{
 		"summonerProfile": summonerProfile,
 		"matchHistory":    matchHistory,
-		"realmData":       models.GetRealmData(),
 	}
 
 	jbytes, err := json.Marshal(m)
