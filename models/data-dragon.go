@@ -7,32 +7,8 @@ import (
 	"net/http"
 )
 
-type GameVersions struct {
-	Item        string `json:"item"`
-	Rune        string `json:"rune"`
-	Mastery     string `json:"mastery"`
-	Summoner    string `json:"summoner"`
-	Champion    string `json:"champion"`
-	ProfileIcon string `json:"profileicon"`
-	Map         string `json:"map"`
-	Language    string `json:"language"`
-	Sticker     string `json:"sticker"`
-}
-
-type RealmData struct {
-	GameVersions   GameVersions `json:"n"`
-	Version        string       `json:"v"`
-	Locale         string       `json:"l"`
-	CDN            string       `json:"cdn"`
-	DataDragon     string       `json:"dd"`
-	LG             string       `json:"lg"`
-	CSS            string       `json:"css"`
-	ProfileIconMax int          `json:"profileiconmax"`
-	Store          string       `json:"-"`
-}
-
-func getRealmData() RealmData {
-	realmData := RealmData{}
+func GetRealmData() map[string]interface{} {
+	realmData := make(map[string]interface{})
 	realmURL := "https://ddragon.leagueoflegends.com/realms/na.json"
 
 	res, getErr := http.Get(realmURL)

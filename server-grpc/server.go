@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -9,11 +10,13 @@ import (
 	"net"
 	"os"
 	"os/signal"
+	"strings"
 
 	"google.golang.org/grpc/reflection"
 
 	pb "github.com/dannyrsu/league-api/leagueservice"
 	"github.com/dannyrsu/league-api/models"
+	"github.com/golang/protobuf/jsonpb"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -28,40 +31,30 @@ var (
 
 type leagueServer struct{}
 
+type summonerStatsResponse struct{}
+
 func constructSummonerStatsResponse(summonerProfile models.SummonerProfile, matchHistory models.MatchHistory) *pb.GetSummonerStatsResponse {
-	matches := make([]*pb.MatchHistory_Match, len(matchHistory.Matches))
-	for i := range matchHistory.Matches {
-		matches[i] = &pb.MatchHistory_Match{
-			Lane:       matchHistory.Matches[i].Lane,
-			GameId:     matchHistory.Matches[i].GameID,
-			Champion:   matchHistory.Matches[i].Champion,
-			PlatformId: matchHistory.Matches[i].PlatformID,
-			Timestamp:  matchHistory.Matches[i].Timestamp,
-			Queue:      matchHistory.Matches[i].Queue,
-			Role:       matchHistory.Matches[i].Role,
-			Season:     matchHistory.Matches[i].Season,
-		}
+
+	m := map[string]interface{}{
+		"summonerProfile": summonerProfile,
+		"matchHistory":    matchHistory,
+		"realmData":       models.GetRealmData(),
 	}
 
-	res := &pb.GetSummonerStatsResponse{
-		SummonerProfile: &pb.SummonerProfile{
-			ProfileIconId: summonerProfile.ProfileIconID,
-			Name:          summonerProfile.Name,
-			Puuid:         summonerProfile.PUUID,
-			SummonerLevel: summonerProfile.SummonerLevel,
-			RevisionDate:  summonerProfile.RevisionDate,
-			Id:            summonerProfile.ID,
-			AccountId:     summonerProfile.AccountID,
-		},
-		MatchHistory: &pb.MatchHistory{
-			Matches:    matches,
-			EndIndex:   matchHistory.EndIndex,
-			StartIndex: matchHistory.StartIndex,
-			TotalGames: matchHistory.TotalGames,
-		},
+	jbytes, err := json.Marshal(m)
+
+	if err != nil {
+		log.Fatalf("Error marshaling data: %v", err)
 	}
 
-	return res
+	result := &pb.GetSummonerStatsResponse{}
+
+	r := strings.NewReader(string(jbytes))
+	if err := jsonpb.Unmarshal(r, result); err != nil {
+		panic(err)
+	}
+
+	return result
 }
 
 func (*leagueServer) GetSummonerStatsUnary(ctx context.Context, req *pb.GetSummonerStatsRequest) (*pb.GetSummonerStatsResponse, error) {

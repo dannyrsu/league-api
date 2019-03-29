@@ -20,10 +20,12 @@ func getSummonerStatsHandler(w http.ResponseWriter, r *http.Request, params http
 
 	summonerProfile := models.GetSummonerProfile(params.ByName("summonername"), queryValues.Get("region"))
 	matchHistory := models.GetMatchHistory(summonerProfile.AccountID, queryValues.Get("region"), 0, 5)
+	realmData := models.GetRealmData()
 
 	results := map[string]interface{}{
 		"summonerProfile": summonerProfile,
 		"matchHistory":    matchHistory,
+		"realmData":       realmData,
 	}
 
 	json.NewEncoder(w).Encode(results)
