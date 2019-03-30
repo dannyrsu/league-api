@@ -9,8 +9,9 @@ import (
 	"time"
 )
 
-func GetGameData(matchId int64, region string) map[string]interface{} {
-	apiURL := fmt.Sprintf("https://%v.api.riotgames.com/lol/match/v4/matches/%v", region, matchId)
+// GetGameData return data for a game id
+func GetGameData(matchID int64, region string) map[string]interface{} {
+	apiURL := fmt.Sprintf("https://%v.api.riotgames.com/lol/match/v4/matches/%v", region, matchID)
 
 	client := http.Client{
 		Timeout: 10 * time.Second,

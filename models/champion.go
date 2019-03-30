@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+// GetChampionByKey return champion data from static files
 func GetChampionByKey(championKey string) map[string]interface{} {
 	championJSON, err := os.Open("static/9.6.1/champion.json")
 	if err != nil {
