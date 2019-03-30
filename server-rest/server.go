@@ -31,10 +31,19 @@ func getSummonerStatsHandler(w http.ResponseWriter, r *http.Request, params http
 	json.NewEncoder(w).Encode(results)
 }
 
+func getChampionByKeyHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	w.Header().Set("Content-Type", "application/json")
+
+	champion := models.GetChampionByKey(params.ByName("championkey"))
+
+	json.NewEncoder(w).Encode(champion)
+}
+
 func main() {
 	router := httprouter.New()
 	router.GET("/", defaultHandler)
 	router.GET("/v1/summoner/:summonername/stats", getSummonerStatsHandler)
+	router.GET("/v1/champion/:championkey", getChampionByKeyHandler)
 	router.ServeFiles("/static/*filepath", http.Dir("static"))
 	handler := cors.Default().Handler(router)
 	log.Fatal(http.ListenAndServe(":8080", handler))

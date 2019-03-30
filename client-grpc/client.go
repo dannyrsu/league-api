@@ -31,7 +31,7 @@ func getSingleStat(c pb.LeagueApiClient) {
 		Region:       "na1",
 	}
 
-	res, err := c.GetSummonerStatsUnary(context.Background(), req)
+	res, err := c.GetSummonerStats(context.Background(), req)
 
 	if err != nil {
 		log.Fatalf("Error calling for stats: %v", err)

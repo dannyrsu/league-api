@@ -29,10 +29,10 @@ var _ = runtime.String
 var _ = utilities.NewDoubleArray
 
 var (
-	filter_LeagueApi_GetSummonerStatsUnary_0 = &utilities.DoubleArray{Encoding: map[string]int{"summoner_name": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_LeagueApi_GetSummonerStats_0 = &utilities.DoubleArray{Encoding: map[string]int{"summoner_name": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
-func request_LeagueApi_GetSummonerStatsUnary_0(ctx context.Context, marshaler runtime.Marshaler, client LeagueApiClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_LeagueApi_GetSummonerStats_0(ctx context.Context, marshaler runtime.Marshaler, client LeagueApiClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq GetSummonerStatsRequest
 	var metadata runtime.ServerMetadata
 
@@ -54,11 +54,38 @@ func request_LeagueApi_GetSummonerStatsUnary_0(ctx context.Context, marshaler ru
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "summoner_name", err)
 	}
 
-	if err := runtime.PopulateQueryParameters(&protoReq, req.URL.Query(), filter_LeagueApi_GetSummonerStatsUnary_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.URL.Query(), filter_LeagueApi_GetSummonerStats_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.GetSummonerStatsUnary(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.GetSummonerStats(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func request_LeagueApi_GetChampionByKey_0(ctx context.Context, marshaler runtime.Marshaler, client LeagueApiClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetChampionByKeyRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["champion_key"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "champion_key")
+	}
+
+	protoReq.ChampionKey, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "champion_key", err)
+	}
+
+	msg, err := client.GetChampionByKey(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
@@ -101,7 +128,7 @@ func RegisterLeagueApiHandler(ctx context.Context, mux *runtime.ServeMux, conn *
 // "LeagueApiClient" to call the correct interceptors.
 func RegisterLeagueApiHandlerClient(ctx context.Context, mux *runtime.ServeMux, client LeagueApiClient) error {
 
-	mux.Handle("GET", pattern_LeagueApi_GetSummonerStatsUnary_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_LeagueApi_GetSummonerStats_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -110,14 +137,34 @@ func RegisterLeagueApiHandlerClient(ctx context.Context, mux *runtime.ServeMux, 
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_LeagueApi_GetSummonerStatsUnary_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_LeagueApi_GetSummonerStats_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_LeagueApi_GetSummonerStatsUnary_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_LeagueApi_GetSummonerStats_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_LeagueApi_GetChampionByKey_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_LeagueApi_GetChampionByKey_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_LeagueApi_GetChampionByKey_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -125,9 +172,13 @@ func RegisterLeagueApiHandlerClient(ctx context.Context, mux *runtime.ServeMux, 
 }
 
 var (
-	pattern_LeagueApi_GetSummonerStatsUnary_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"v1", "summoner", "summoner_name", "stats"}, ""))
+	pattern_LeagueApi_GetSummonerStats_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 2, 3}, []string{"v1", "summoner", "summoner_name", "stats"}, ""))
+
+	pattern_LeagueApi_GetChampionByKey_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"v1", "champion", "champion_key"}, ""))
 )
 
 var (
-	forward_LeagueApi_GetSummonerStatsUnary_0 = runtime.ForwardResponseMessage
+	forward_LeagueApi_GetSummonerStats_0 = runtime.ForwardResponseMessage
+
+	forward_LeagueApi_GetChampionByKey_0 = runtime.ForwardResponseMessage
 )

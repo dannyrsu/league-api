@@ -9,6 +9,7 @@ GRPC API for league stats
 sudo cp -a Downloads/include /usr/local/include
 
 #Generate GRPC stub
+
 -Standard Protobuf
 protoc -I/usr/local/include -I. -I$GOPATH/src -I$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis --go_out=plugins=grpc:. leagueservice/league.proto
 
