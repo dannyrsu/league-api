@@ -13,7 +13,6 @@ message GetSummonerStatsRequest {
 
 message GetSummonerStatsResponse {
   google.protobuf.Struct summonerProfile = 1;
-  google.protobuf.Struct matchHistory = 2;
 }
 
 message GetChampionByKeyRequest {

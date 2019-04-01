@@ -25,3 +25,4 @@ protoc -I/usr/local/include -I. -I$GOPATH/src -I$GOPATH/src/github.com/grpc-ecos
 - More end points for match history
 - Add channels and go routines for the api calls
 - Try to get rid of intermediate structs
+- Get MatchHistory for details route on the angular app

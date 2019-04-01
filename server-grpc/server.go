@@ -81,11 +81,10 @@ func (*leagueServer) GetChampionByKeyBiDirectional(stream pb.LeagueApi_GetChampi
 	}
 }
 
-func constructSummonerStatsResponse(summonerProfile models.SummonerProfile, matchHistory models.MatchHistory) *pb.GetSummonerStatsResponse {
+func constructSummonerStatsResponse(summonerProfile models.SummonerProfile) *pb.GetSummonerStatsResponse {
 
 	m := map[string]interface{}{
 		"summonerProfile": summonerProfile,
-		"matchHistory":    matchHistory,
 	}
 
 	jsonbytes, err := json.Marshal(m)
@@ -108,9 +107,7 @@ func constructSummonerStatsResponse(summonerProfile models.SummonerProfile, matc
 
 func (*leagueServer) GetSummonerStats(ctx context.Context, req *pb.GetSummonerStatsRequest) (*pb.GetSummonerStatsResponse, error) {
 	summonerProfile := models.GetSummonerProfile(req.GetSummonerName(), req.GetRegion())
-	matchHistory := models.GetMatchHistory(summonerProfile.AccountID, req.GetRegion(), 0, 5)
-
-	res := constructSummonerStatsResponse(summonerProfile, matchHistory)
+	res := constructSummonerStatsResponse(summonerProfile)
 
 	return res, nil
 }
@@ -129,8 +126,7 @@ func (*leagueServer) GetSummonerStatsBiDirectional(stream pb.LeagueApi_GetSummon
 		}
 
 		summonerProfile := models.GetSummonerProfile(req.GetSummonerName(), req.GetRegion())
-		matchHistory := models.GetMatchHistory(summonerProfile.AccountID, req.GetRegion(), 0, 5)
-		sendErr := stream.Send(constructSummonerStatsResponse(summonerProfile, matchHistory))
+		sendErr := stream.Send(constructSummonerStatsResponse(summonerProfile))
 
 		if sendErr != nil {
 			log.Fatalf("Error while sending data to client: %v", err)
