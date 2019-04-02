@@ -21,37 +21,6 @@ type SummonerProfile struct {
 	MatchHistory  []map[string]interface{} `json:"matchHistory"`
 }
 
-func getMatchSummary(accountID, region string) []map[string]interface{} {
-	matchHistory := GetMatchHistory(accountID, region, 0, 5)
-	matchSummary := make([]map[string]interface{}, len(matchHistory.Matches))
-
-	for i := 0; i < len(matchHistory.Matches); i++ {
-		match := matchHistory.Matches[i]
-		game := GetGameData(match.GameID, region)
-		var participantID float64
-		for j := 0; j < len(game["participantIdentities"].([]interface{})); j++ {
-			participant := game["participantIdentities"].([]interface{})[j].(map[string]interface{})
-			player := participant["player"]
-			if player.(map[string]interface{})["accountId"] == accountID {
-				participantID = participant["participantId"].(float64)
-				break
-			}
-		}
-
-		if participantID > 0 {
-			for k := 0; k < len(game["participants"].([]interface{})); k++ {
-				participant := game["participants"].([]interface{})[k].(map[string]interface{})
-				if participant["participantId"] == participantID {
-					matchSummary[i] = participant
-					break
-				}
-			}
-		}
-	}
-
-	return matchSummary
-}
-
 // GetSummonerProfile returns a profile of the summoner
 func GetSummonerProfile(summonerName, region string) SummonerProfile {
 	apiURL := fmt.Sprintf("https://%v.api.riotgames.com/lol/summoner/v4/summoners/by-name/%v", region, summonerName)

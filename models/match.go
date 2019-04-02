@@ -26,6 +26,45 @@ type MatchHistory struct {
 	TotalGames int32 `json:"totalGames"`
 }
 
+func getMatchSummary(accountID, region string) []map[string]interface{} {
+	matchHistory := GetMatchHistory(accountID, region, 0, 5)
+	matchSummary := make([]map[string]interface{}, len(matchHistory.Matches))
+
+	for i := 0; i < len(matchHistory.Matches); i++ {
+		match := matchHistory.Matches[i]
+		game := GetGameData(match.GameID, region)
+		var participantID float64
+		for j := 0; j < len(game["participantIdentities"].([]interface{})); j++ {
+			participant := game["participantIdentities"].([]interface{})[j].(map[string]interface{})
+			player := participant["player"]
+			if player.(map[string]interface{})["accountId"] == accountID {
+				participantID = participant["participantId"].(float64)
+				break
+			}
+		}
+
+		if participantID > 0 {
+			for k := 0; k < len(game["participants"].([]interface{})); k++ {
+				participant := game["participants"].([]interface{})[k].(map[string]interface{})
+				if participant["participantId"] == participantID {
+					participant["gameCreation"] = game["gameCreation"]
+					participant["gameDuration"] = game["gameDuration"]
+					participant["gameType"] = game["gameType"]
+					participant["gameMode"] = game["gameMode"]
+					participant["seasonId"] = game["seasonId"]
+					participant["queueId"] = game["queueId"]
+					participant["gameVersion"] = game["gameVersion"]
+					participant["mapId"] = game["mapId"]
+					matchSummary[i] = participant
+					break
+				}
+			}
+		}
+	}
+
+	return matchSummary
+}
+
 // GetMatchHistory for the account
 func GetMatchHistory(accountID, region string, beginIndex, endIndex int) MatchHistory {
 	apiURL := fmt.Sprintf("https://%v.api.riotgames.com/lol/match/v4/matchlists/by-account/%v?queue=420&endIndex=%v&beginIndex=%v", region, accountID, endIndex, beginIndex)
