@@ -10,19 +10,20 @@ sudo cp -a Downloads/include /usr/local/include
 
 #Generate GRPC stub
 
--Standard Protobuf
+- Standard Protobuf
+
 protoc -I/usr/local/include -I. -I$GOPATH/src -I$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis --go_out=plugins=grpc:. leagueservice/league.proto
 
 - GOGO Protobuf
+
 protoc -I/usr/local/include -I. -I$GOPATH/src -I$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis --gofast_out=plugins=grpc:. leagueservice/league.proto
 
-#Generates Reverse Proxy
+- Generates Reverse Proxy
+
 protoc -I/usr/local/include -I. -I$GOPATH/src -I$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis --grpc-gateway_out=logtostderr=true:. leagueservice/league.proto 
 
 # TODO
 - Add Docker file maybe K8s
 - Redis for caching profile calls
-- More end points for match history
 - Add channels and go routines for the api calls
 - Try to get rid of intermediate structs
-- Get MatchHistory for details route on the angular app
