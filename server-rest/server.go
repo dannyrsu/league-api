@@ -12,11 +12,15 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-func defaultHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+type server struct {
+	router *httprouter.Router
+}
+
+func (s *server) defaultHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Fprint(w, "Welcome to the League of Draaaaven")
 }
 
-func getSummonerStatsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+func (s *server) getSummonerStatsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	w.Header().Set("Content-Type", "application/json")
 	queryValues := r.URL.Query()
 
@@ -29,7 +33,7 @@ func getSummonerStatsHandler(w http.ResponseWriter, r *http.Request, params http
 	json.NewEncoder(w).Encode(results)
 }
 
-func getChampionByKeyHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+func (s *server) getChampionByKeyHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	w.Header().Set("Content-Type", "application/json")
 
 	champion := models.GetChampionByKey(params.ByName("championkey"))
@@ -37,12 +41,20 @@ func getChampionByKeyHandler(w http.ResponseWriter, r *http.Request, params http
 	json.NewEncoder(w).Encode(champion)
 }
 
+func (s *server) routes() {
+	s.router.GET("/", s.defaultHandler)
+	s.router.GET("/v1/summoner/:summonername/stats", s.getSummonerStatsHandler)
+	s.router.GET("/v1/champion/:championkey", s.getChampionByKeyHandler)
+	s.router.ServeFiles("/static/*filepath", http.Dir("static"))
+}
+
 func main() {
-	router := httprouter.New()
-	router.GET("/", defaultHandler)
-	router.GET("/v1/summoner/:summonername/stats", getSummonerStatsHandler)
-	router.GET("/v1/champion/:championkey", getChampionByKeyHandler)
-	router.ServeFiles("/static/*filepath", http.Dir("static"))
-	handler := cors.Default().Handler(router)
+	server := &server{
+		router: httprouter.New(),
+	}
+
+	server.routes()
+
+	handler := cors.Default().Handler(server.router)
 	log.Fatal(http.ListenAndServe(":8080", handler))
 }
