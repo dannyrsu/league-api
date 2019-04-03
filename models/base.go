@@ -20,6 +20,6 @@ func init() {
 }
 
 // GetRiotAPIKey return the key loaded from env
-func GetRiotAPIKey() string {
+func getRiotAPIKey() string {
 	return riotAPIKey
 }

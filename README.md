@@ -27,3 +27,4 @@ protoc -I/usr/local/include -I. -I$GOPATH/src -I$GOPATH/src/github.com/grpc-ecos
 - Redis for caching profile calls
 - Add channels and go routines for the api calls
 - Try to get rid of intermediate structs
+- Restructure the rest api and client app to best practices
