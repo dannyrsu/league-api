@@ -16,11 +16,11 @@ type server struct {
 	router *httprouter.Router
 }
 
-func (s *server) defaultHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (*server) defaultHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	fmt.Fprint(w, "Welcome to the League of Draaaaven")
 }
 
-func (s *server) getSummonerStatsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+func (*server) getSummonerStatsHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	w.Header().Set("Content-Type", "application/json")
 	queryValues := r.URL.Query()
 
@@ -33,7 +33,7 @@ func (s *server) getSummonerStatsHandler(w http.ResponseWriter, r *http.Request,
 	json.NewEncoder(w).Encode(results)
 }
 
-func (s *server) getChampionByKeyHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+func (*server) getChampionByKeyHandler(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	w.Header().Set("Content-Type", "application/json")
 
 	champion := models.GetChampionByKey(params.ByName("championkey"))

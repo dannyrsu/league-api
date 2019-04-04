@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -55,6 +56,8 @@ func getMatchSummary(accountID, region string) []map[string]interface{} {
 					participant["queueId"] = game["queueId"]
 					participant["gameVersion"] = game["gameVersion"]
 					participant["mapId"] = game["mapId"]
+					participant["spell1"] = getSummonerSpellByKey(strconv.FormatFloat(participant["spell1Id"].(float64), 'f', 0, 64))
+					participant["spell2"] = getSummonerSpellByKey(strconv.FormatFloat(participant["spell2Id"].(float64), 'f', 0, 64))
 					matchSummary[i] = participant
 					break
 				}
