@@ -15,6 +15,15 @@ message GetSummonerStatsResponse {
   google.protobuf.Struct summonerProfile = 1;
 }
 
+message GetMatchRequest {
+  int64 match_id = 1;
+  string region = 2;
+}
+
+message GetMatchResponse {
+  google.protobuf.Struct match = 1;
+}
+
 message GetChampionByKeyRequest {
   string champion_key = 1;
 }
@@ -30,6 +39,12 @@ service LeagueApi {
     };
   };
   rpc GetSummonerStatsBiDirectional(stream GetSummonerStatsRequest) returns (stream GetSummonerStatsResponse);
+  rpc GetMatch(GetMatchRequest) returns (GetMatchResponse) {
+    option (google.api.http) = {
+      get: "/v1/match/{match_id}"
+    };
+  }
+  rpc GetMatchBiDirectional(stream GetMatchRequest) returns (stream GetMatchResponse);
   rpc GetChampionByKey(GetChampionByKeyRequest) returns (GetChampionByKeyResponse){
     option (google.api.http) = {
       get: "/v1/champion/{champion_key}"

@@ -48,6 +48,9 @@ func getMatchSummary(accountID, region string) []map[string]interface{} {
 			for k := 0; k < len(game["participants"].([]interface{})); k++ {
 				participant := game["participants"].([]interface{})[k].(map[string]interface{})
 				if participant["participantId"] == participantID {
+					participant["lane"] = match.Lane
+					participant["gameId"] = match.GameID
+					participant["role"] = match.Role
 					participant["gameCreation"] = game["gameCreation"]
 					participant["gameDuration"] = game["gameDuration"]
 					participant["gameType"] = game["gameType"]
