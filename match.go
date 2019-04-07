@@ -1,4 +1,4 @@
-package models
+package league-api
 
 import (
 	"encoding/json"
@@ -27,7 +27,7 @@ type MatchHistory struct {
 	TotalGames int32 `json:"totalGames"`
 }
 
-func getMatchSummary(accountID, region string) []map[string]interface{} {
+func GetMatchSummary(accountID, region string) []map[string]interface{} {
 	matchHistory := GetMatchHistory(accountID, region, 0, 5)
 	matchSummary := make([]map[string]interface{}, len(matchHistory.Matches))
 

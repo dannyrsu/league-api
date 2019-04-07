@@ -1,4 +1,4 @@
-package models
+package league-api
 
 import (
 	"encoding/json"
