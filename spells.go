@@ -1,4 +1,4 @@
-package league-api
+package leagueapi
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 )
 
 func GetSummonerSpellByKey(spellKey string) map[string]interface{} {
-	summonerJSON, err := os.Open("static/9.6.1/summoner.json")
+	summonerJSON, err := os.Open("github.com/dannyrsu/league-api/static/9.6.1/summoner.json")
 
 	if err != nil {
 		log.Fatalf("Error opening summoner.json: %v", err)

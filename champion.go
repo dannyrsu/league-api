@@ -1,4 +1,4 @@
-package league-api
+package leagueapi
 
 import (
 	"encoding/json"

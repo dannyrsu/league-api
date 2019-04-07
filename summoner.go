@@ -1,4 +1,4 @@
-package league-api
+package leagueapi
 
 import (
 	"encoding/json"
@@ -53,7 +53,7 @@ func GetSummonerProfile(summonerName, region string) SummonerProfile {
 		log.Fatal(jsonErr)
 	}
 
-	summoner.MatchHistory = getMatchSummary(summoner.AccountID, region)
+	summoner.MatchHistory = GetMatchSummary(summoner.AccountID, region)
 
 	return summoner
 }
