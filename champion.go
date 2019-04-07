@@ -5,11 +5,19 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
+	"runtime"
 )
 
 // GetChampionByKey return champion data from static files
 func GetChampionByKey(championKey string) map[string]interface{} {
-	championJSON, err := os.Open("static/9.6.1/championFull.json")
+	_, filename, _, ok := runtime.Caller(0)
+
+	if !ok {
+		panic("no caller information")
+	}
+
+	championJSON, err := os.Open(path.Dir(filename) + "/static/9.6.1/championFull.json")
 	if err != nil {
 		log.Fatalf("Error opening champion.json: %v", err)
 	}
