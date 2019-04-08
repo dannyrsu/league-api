@@ -11,7 +11,7 @@ import (
 
 // GetChampionByKey return champion data from static files
 func GetChampionByKey(championKey string) map[string]interface{} {
-	_, filename, _, ok := runtime.Caller(0)
+	_, filename, _, ok := runtime.Caller(0) // TODO: Pass in as configuration this is not good practice
 
 	if !ok {
 		panic("no caller information")
