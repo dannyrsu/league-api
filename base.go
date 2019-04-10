@@ -7,7 +7,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var riotAPIKey string
+var riotAPIKey, staticFilesRoot string
 
 func init() {
 	envErr := godotenv.Load()
@@ -17,9 +17,5 @@ func init() {
 	}
 
 	riotAPIKey = os.Getenv("RIOT_API_KEY")
-}
-
-// GetRiotAPIKey return the key loaded from env
-func getRiotAPIKey() string {
-	return riotAPIKey
+	staticFilesRoot = os.Getenv("RIOT_STATIC_FILES_ROOT")
 }

@@ -29,7 +29,7 @@ func GetSummonerProfile(summonerName, region string) SummonerProfile {
 		Timeout: 10 * time.Second,
 	}
 	req, reqErr := http.NewRequest(http.MethodGet, apiURL, nil)
-	req.Header.Set("X-Riot-Token", getRiotAPIKey())
+	req.Header.Set("X-Riot-Token", riotAPIKey)
 	if reqErr != nil {
 		log.Fatalf("Error creating request: %v", reqErr)
 	}

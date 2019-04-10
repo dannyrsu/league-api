@@ -5,18 +5,10 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"path"
-	"runtime"
 )
 
 func GetSummonerSpellByKey(spellKey string) map[string]interface{} {
-	_, filename, _, ok := runtime.Caller(0) // TODO: Pass in as configuration this is not good practice
-
-	if !ok {
-		panic("no caller information")
-	}
-
-	summonerJSON, err := os.Open(path.Dir(filename) + "/static/9.6.1/summoner.json")
+	summonerJSON, err := os.Open(staticFilesRoot + "summoner.json")
 
 	if err != nil {
 		log.Fatalf("Error opening summoner.json: %v", err)
