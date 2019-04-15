@@ -11,14 +11,14 @@ import (
 
 // SummonerProfile model
 type SummonerProfile struct {
-	ProfileIconID int32                    `json:"profileIconId"`
-	Name          string                   `json:"name"`
-	PUUID         string                   `json:"puuid"`
-	SummonerLevel int64                    `json:"summonerLevel"`
-	RevisionDate  int64                    `json:"revisionDate"`
-	ID            string                   `json:"id"`
-	AccountID     string                   `json:"accountId"`
-	MatchHistory  []map[string]interface{} `json:"matchHistory"`
+	ProfileIconID int32         `json:"profileIconId"`
+	Name          string        `json:"name"`
+	PUUID         string        `json:"puuid"`
+	SummonerLevel int64         `json:"summonerLevel"`
+	RevisionDate  int64         `json:"revisionDate"`
+	ID            string        `json:"id"`
+	AccountID     string        `json:"accountId"`
+	MatchHistory  []interface{} `json:"matchHistory"`
 }
 
 // GetSummonerProfile returns a profile of the summoner

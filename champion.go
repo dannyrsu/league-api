@@ -8,7 +8,7 @@ import (
 )
 
 // GetChampionByKey return champion data from static files
-func GetChampionByKey(championKey string) map[string]interface{} {
+func GetChampionByKey(championKey string) interface{} {
 	championJSON, err := os.Open(staticFilesRoot + "championFull.json")
 	if err != nil {
 		log.Fatalf("Error opening champion.json: %v", err)
@@ -26,7 +26,7 @@ func GetChampionByKey(championKey string) map[string]interface{} {
 
 	for _, champion := range rawData["data"].(map[string]interface{}) {
 		if champion.(map[string]interface{})["key"] == championKey {
-			return champion.(map[string]interface{})
+			return champion
 		}
 	}
 

@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func GetSummonerSpellByKey(spellKey string) map[string]interface{} {
+func GetSummonerSpellByKey(spellKey string) interface{} {
 	summonerJSON, err := os.Open(staticFilesRoot + "summoner.json")
 
 	if err != nil {
@@ -27,7 +27,7 @@ func GetSummonerSpellByKey(spellKey string) map[string]interface{} {
 
 	for _, spell := range rawData["data"].(map[string]interface{}) {
 		if spell.(map[string]interface{})["key"] == spellKey {
-			return spell.(map[string]interface{})
+			return spell
 		}
 	}
 
