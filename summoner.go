@@ -11,14 +11,14 @@ import (
 
 // SummonerProfile model
 type SummonerProfile struct {
-	ProfileIconID int32   `json:"profileIconId"`
-	Name          string  `json:"name"`
-	PUUID         string  `json:"puuid"`
-	SummonerLevel int64   `json:"summonerLevel"`
-	RevisionDate  int64   `json:"revisionDate"`
-	ID            string  `json:"id"`
-	AccountID     string  `json:"accountId"`
-	MatchHistory  []Match `json:"matchHistory"`
+	ProfileIconID int32        `json:"profileIconId"`
+	Name          string       `json:"name"`
+	PUUID         string       `json:"puuid"`
+	SummonerLevel int64        `json:"summonerLevel"`
+	RevisionDate  int64        `json:"revisionDate"`
+	ID            string       `json:"id"`
+	AccountID     string       `json:"accountId"`
+	MatchHistory  MatchHistory `json:"matchHistory"`
 }
 
 // GetSummonerProfile returns a profile of the summoner
@@ -52,6 +52,8 @@ func GetSummonerProfile(summonerName, region string) SummonerProfile {
 	if jsonErr != nil {
 		log.Fatal(jsonErr)
 	}
+
+	summoner.MatchHistory = GetMatchHistory(summoner.AccountID, region, 0, 5)
 
 	return summoner
 }

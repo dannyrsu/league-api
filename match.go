@@ -20,6 +20,7 @@ type MatchHistory struct {
 		Queue      int32  `json:"queue"`
 		Role       string `json:"role"`
 		Season     int32  `json:"season"`
+		Match      Match  `json:"match"`
 	} `json:"matches"`
 	EndIndex   int32 `json:"endIndex"`
 	StartIndex int32 `json:"startIndex"`
@@ -238,6 +239,11 @@ func GetMatchHistory(accountID, region string, beginIndex, endIndex int) MatchHi
 	jsonErr := json.Unmarshal(body, &matchHistory)
 	if jsonErr != nil {
 		log.Fatal(jsonErr)
+	}
+
+	for i, matchInfo := range matchHistory.Matches {
+		match := GetMatch(matchInfo.GameID, region)
+		matchHistory.Matches[i].Match = match
 	}
 
 	return matchHistory
