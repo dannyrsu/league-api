@@ -169,6 +169,7 @@ type Participant struct {
 	ChampionID    int    `json:"championId"`
 	ChampionName  string `json:"championName"`
 	ChampionBlurb string `json:"championBlurb"`
+	ChampionImage string `json:"championImage"`
 }
 
 type Match struct {
@@ -273,6 +274,7 @@ func GetMatchHistory(accountID, region string, beginIndex, endIndex int) MatchHi
 				champion := GetChampionByKey(strconv.Itoa(participant.ChampionID))
 				participant.ChampionName = champion.Name
 				participant.ChampionBlurb = champion.Blurb
+				participant.ChampionImage = champion.Image.Full
 
 				matchHistory.Matches[i].Player = participant
 				break
